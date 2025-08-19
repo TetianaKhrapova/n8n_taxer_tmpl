@@ -1,0 +1,6 @@
+chromadb==0.4.24
+openai>=1.30.0
+tiktoken>=0.7.0
+python-dotenv>=1.0.1
+pypdf>=4.2.0
+beautifulsoup4>=4.12.3

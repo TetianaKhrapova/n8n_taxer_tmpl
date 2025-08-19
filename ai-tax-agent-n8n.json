@@ -1,0 +1,78 @@
+{
+  "name": "AI Tax Agent (Webhook → /answer → Respond)",
+  "nodes": [
+    {
+      "parameters": {
+        "path": "ai-tax-agent",
+        "methods": [
+          "POST"
+        ]
+      },
+      "id": "1",
+      "name": "Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [
+        300,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "url": "http://host.docker.internal:5000/answer",
+        "method": "POST",
+        "responseFormat": "json",
+        "jsonParameters": true,
+        "options": {},
+        "bodyParametersJson": "={\"question\": $json[\"body\"][\"question\"], \"n\": 5}"
+      },
+      "id": "2",
+      "name": "HTTP Request (AI Tax API /answer)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 1,
+      "position": [
+        600,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "responseMode": "onReceived",
+        "responseData": "={{$json[\"answer\"]}}",
+        "options": {}
+      },
+      "id": "3",
+      "name": "Respond to Webhook",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [
+        900,
+        300
+      ]
+    }
+  ],
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request (AI Tax API /answer)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request (AI Tax API /answer)": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  }
+}
